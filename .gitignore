@@ -1,3 +1,12 @@
 .idea/
 node_modules/
 lab_1/data.txt
+lab_1/key*
+lab_1/sign
+lab_1/build
+
+lab_2/data.txt
+lab_2/build
+lab_2/program
+lab_2/key*
+lab_2/sign

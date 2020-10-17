@@ -1,115 +1,113 @@
-import inquirer from "inquirer";
-import { changePassword } from "./menu";
-import User from "./User";
+import inquirer from 'inquirer';
+import { changePassword } from './menu';
+import User from './User';
 
 const blockUser = async (data) => {
   const { username } = await inquirer.prompt({
-    type: "input",
-    message: "Enter username to ban",
-    name: "username",
+    type: 'input',
+    message: 'Enter username to ban',
+    name: 'username',
   });
 
   const user = data.users.find((u) => u.username === username);
   if (!user) {
-    console.log("Such user not found");
+    console.info('Such user not found');
     return;
   }
 
   user.blocked = true;
-  console.log("User successfully blocked");
+  console.info('User successfully blocked');
 };
 
 const addUser = async (data) => {
   const { username } = await inquirer.prompt({
-    type: "input",
-    message: "Enter username",
-    name: "username",
+    type: 'input',
+    message: 'Enter username',
+    name: 'username',
   });
 
   const user = data.users.find((u) => u.username === username);
   if (user) {
-    console.log("Such user already found");
+    console.info('Such user already found');
     return;
   }
 
   data.users.push(new User(false, username));
-  console.log("User successfully added");
+  console.info('User successfully added');
 };
 
 const passwordOptions = async (data) => {
   const { passwordIsOn } = await inquirer.prompt({
-    type: "checkbox",
-    name: "passwordIsOn",
-    message: "Choose password option",
-    choices: [
-      { name: "Password verification", checked: data.passwordValidation },
-    ],
+    type: 'checkbox',
+    name: 'passwordIsOn',
+    message: 'Choose password option',
+    choices: [{ name: 'Password verification', checked: data.passwordValidation }],
   });
 
-  data.passwordValidation = passwordIsOn.includes("Password verification");
+  data.passwordValidation = passwordIsOn.includes('Password verification');
 };
 
 const listUsers = async (data) => {
   const { user } = await inquirer.prompt({
-    type: "list",
-    name: "user",
-    message: "Choose user",
+    type: 'list',
+    name: 'user',
+    message: 'Choose user',
     choices: data.users.map((u) => ({
-      name: `${u.username} - ${u.blocked ? "Blocked" : "Not blocked"} - ${
-        u.passwordVerification ? "Verification on" : "Verification off"
+      name: `${u.username} - ${u.blocked ? 'Blocked' : 'Not blocked'} - ${
+        u.passwordVerification ? 'Verification on' : 'Verification off'
       }`,
       value: u,
     })),
   });
 
-  console.log(`User - ${user.username}`);
-  console.log(`Blocked: ${!!user.blocked}`);
-  console.log(`Verification: ${!!user.passwordVerification}`);
-  console.log(`Password set: ${!!user.password}`);
-  console.log(`Admin: ${!!user.isAdmin}`);
+  console.info(`User - ${user.username}`);
+  console.info(`Blocked: ${!!user.blocked}`);
+  console.info(`Verification: ${!!user.passwordVerification}`);
+  console.info(`Password set: ${!!user.password}`);
+  console.info(`Admin: ${!!user.isAdmin}`);
 
   await inquirer.prompt({
-    type: "confirm",
-    name: "ok",
-    message: "OK?",
+    type: 'confirm',
+    name: 'ok',
+    message: 'OK?',
   });
 };
 
 export const adminMenu = async (data, user) => {
   const { menu } = await inquirer.prompt({
-    type: "list",
-    name: "menu",
-    message: "Admin Menu | What do you want to do?",
+    type: 'list',
+    name: 'menu',
+    message: 'Admin Menu | What do you want to do?',
     choices: [
-      "Change password",
-      "List users",
-      "Add new user",
-      "Ban user",
-      "Password options",
+      'Change password',
+      'List users',
+      'Add new user',
+      'Ban user',
+      'Password options',
       new inquirer.Separator(),
-      "Exit",
+      'Exit',
     ],
   });
 
-  if (menu === "Exit") return;
+  if (menu === 'Exit') return;
 
-  if (menu === "Password options") {
+  if (menu === 'Password options') {
     await passwordOptions(data);
   }
 
-  if (menu === "Block user") {
+  if (menu === 'Block user') {
     await blockUser(data);
   }
 
-  if (menu === "Add new user") {
+  if (menu === 'Add new user') {
     await addUser(data);
   }
 
-  if (menu === "List users") {
+  if (menu === 'List users') {
     await listUsers(data);
   }
 
-  if (menu === "Change password") {
+  if (menu === 'Change password') {
     await changePassword(data.passwordValidation, user);
   }
 

@@ -2,6 +2,7 @@
   "scripts": {
     "start": "babel-node src/main.js",
     "build": "babel src -d build",
+    "program": "node program/main.js",
     "lint": "eslint \"src/**/*.js\" --fix"
   },
   "devDependencies": {
